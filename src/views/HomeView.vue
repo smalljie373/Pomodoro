@@ -67,9 +67,9 @@ import { storeToRefs } from 'pinia'
 const notestone = noteStone()
 const { todo } = storeToRefs(notestone)
 const { delTodo } = notestone
-const time = ref(15) // 總秒數
-const miunte = ref(0) // 分鐘
-const second = ref(15) // 秒數
+const time = ref(1500) // 總秒數
+const miunte = ref(25) // 分鐘
+const second = ref(0) // 秒數
 const countTime = ref({}) // 存放計時器
 const timingType = ref('') //
 const heroChart = ref(null)
