@@ -5,11 +5,11 @@
       class="w-full bg-gray-200 flex justify-center"
       :class="[restMode ? 'bg-green-200' : 'bg-gray-200']"
     >
-      <div class="flex flex-col justify-around h-full">
+      <div class="flex flex-col justify-around items-center h-full">
         <h2 class="text-3xl text-center font-bold" v-if="todos.length != 0">
           {{ todos[0]?.content }}
         </h2>
-        <h2 class="text-3xl text-center font-bold" v-else>還未新增番茄鐘</h2>
+        <h2 class="text-3xl text-center font-bold" v-else>Pomodoro has not been added yet</h2>
         <div class="card-content-image relative">
           <canvas id="heroChart" ref="heroChart"></canvas>
           <h2 class="font-bold text-4xl absolute top-[135px] left-[105px]">
@@ -18,7 +18,7 @@
             }}
           </h2>
         </div>
-        <div class="controlpanel">
+        <div class="controlpanel w-full">
           <ul class="flex justify-between items-center">
             <li>
               <button
@@ -65,11 +65,8 @@ import Chart from 'chart.js/auto'
 import { noteStone } from '@/stores/noteStone'
 import { storeToRefs } from 'pinia'
 const notestone = noteStone()
-const { todo } = storeToRefs(notestone)
-const { delTodo } = notestone
-const time = ref(1500) // 總秒數
-const miunte = ref(25) // 分鐘
-const second = ref(0) // 秒數
+const { todo, time,miunte,second  } = storeToRefs(notestone)
+const { delTodo, checkTimeType,checkTime } = notestone
 const countTime = ref({}) // 存放計時器
 const timingType = ref('') //
 const heroChart = ref(null)
@@ -82,7 +79,7 @@ onMounted(() => {
       datasets: [
         {
           label: 'Dataset 1',
-          data: [0, 1500],
+          data: [0, time.value],
           backgroundColor: ['#EA5548', '#ACACAC']
         }
       ]
@@ -140,23 +137,21 @@ const resetTime = () => {
   timingType.value = 'reset'
   window.clearInterval(countTime.value)
   if (restMode.value) {
+    checkTimeType('break');
     setTimeout(() => {
+      checkTime();
       countTime.value = {}
-      time.value = 300
-      miunte.value = 5
-      second.value = 0
       myChart.data.datasets[0].data[0] = 0
-      myChart.data.datasets[0].data[1] = 300
+      myChart.data.datasets[0].data[1] = time.value
       myChart.update()
     }, 0)
   } else {
+    checkTimeType('work');
     setTimeout(() => {
+      checkTime();
       countTime.value = {}
-      time.value = 1500
-      miunte.value = 25
-      second.value = 0
       myChart.data.datasets[0].data[0] = 0
-      myChart.data.datasets[0].data[1] = 1500
+      myChart.data.datasets[0].data[1] = time.value
       myChart.update()
     }, 0)
   }

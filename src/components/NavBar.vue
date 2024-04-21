@@ -29,6 +29,16 @@
           <button
             type="button"
             class="text-white text-2xl hover:text-red-600 hover:bg-gray-700 p-5"
+            :class="[menutype === 'settings' ? 'text-red-600 bg-gray-700' : '']"
+            @click.prevent="changeMenu('settings')"
+          >
+            <i class="bi bi-gear"></i>
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            class="text-white text-2xl hover:text-red-600 hover:bg-gray-700 p-5"
             @click.prevent="changeCollapseType"
           >
             <i class="bi bi-x-lg"></i>
@@ -73,7 +83,7 @@
         </form>
       </div>
     </div>
-    <div class="tasklists w-full" v-else>
+    <div class="tasklists w-full" v-else-if="menutype === 'tasklists'">
       <div class="p-3">
         <h3 class="text-3xl text-white font-bold py-5">TASK LISTS</h3>
         <hr />
@@ -105,6 +115,26 @@
         </ul>
       </div>
     </div>
+    <div class="settings w-full" v-else>
+      <div class="p-3">
+        <h3 class="text-3xl text-white font-bold py-5">Settings</h3>
+        <hr />
+        <div class="mb-3">
+          <label for="worktime" class="block text-gray-200 text-sm font-bold mb-2">Work duration</label>
+          <input type="number" id="worktime" value="0" max="60" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          v-model="timeData.worktime">
+        </div>
+        <div class="mb-3">
+          <label for="breaktime" class="block text-gray-200 text-sm font-bold mb-2">Short break duration</label>
+          <input type="number" id="breaktime" value="0" max="30" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          v-model="timeData.breaktime">
+        </div>
+        <div class="mb-3">
+          <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 w-full rounded focus:outline-none focus:shadow-outline"
+          @click.prevent='checkTime'>套用</button>
+        </div>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -113,12 +143,12 @@ import { ref, computed } from 'vue'
 import { noteStone } from '@/stores/noteStone'
 import { storeToRefs } from 'pinia'
 const notestone = noteStone()
-const { addTodo } = notestone
+const { addTodo, checkTime } = notestone
 const menutype = ref('add')
 const collapseType = ref('false')
 const taskTypes = ref(['TODO', 'DONE'])
 const taskType = ref('TODO')
-const { content, todo } = storeToRefs(notestone)
+const { content, todo, timeData } = storeToRefs(notestone)
 const changeMenu = (type) => {
   menutype.value = type
 }

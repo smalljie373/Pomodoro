@@ -1,6 +1,6 @@
 # Pomodoro
 
--待補
+陽春版的番茄鐘
 
 ## Project Packages 專案套件
 

@@ -5,6 +5,14 @@ import swal from 'sweetalert2'
 export const noteStone = defineStore('note', () => {
   const todo = ref([])
   const content = ref('')
+  const time = ref(1500);
+  const miunte = ref(25);
+  const second = ref(0);
+  const timeType = ref('work');
+  const timeData = ref({
+    worktime: 25,
+    breaktime: 5,
+  })
   const renderString = () => {
     const length = 8
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -58,5 +66,19 @@ export const noteStone = defineStore('note', () => {
     })
     todo.value = Data
   }
-  return { todo, content, addTodo, delTodo }
+  const checkTime = () => {
+    if(timeType.value === 'work') {
+      miunte.value  = timeData.value.worktime;
+      second.value = 0;
+      time.value = miunte.value*60 + second.value;
+    } else{
+      miunte.value  = timeData.value.breaktime;
+      second.value = 0;
+      time.value = miunte.value*60 + second.value;
+    }
+  }
+  const checkTimeType = (type) => {
+    timeType.value = type;
+  }
+  return { todo, content, timeData, addTodo, delTodo,checkTimeType, checkTime, time, miunte, second,timeType }
 })
